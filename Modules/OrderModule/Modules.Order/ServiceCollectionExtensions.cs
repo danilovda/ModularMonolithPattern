@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Modules.Orders.Interfaces;
 using Modules.Orders.Repositories;
+using Modules.Orders.Repositories.Settings;
 using Modules.Orders.Services;
 
 namespace Modules.Orders;
@@ -13,10 +14,15 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services,
         ConfigurationManager configuration)
     {
+        var databaseSettings = configuration
+            .GetSection($"{nameof(DatabaseSettings)}")
+            .Get<DatabaseSettings>() ?? throw new Exception($"{nameof(DatabaseSettings)} is null");
+
         services.AddDbContext<OrderDbContext>(options => options
-            .UseNpgsql(
-                configuration.GetConnectionString("Db"),
-                npgsqlOptions => npgsqlOptions.MigrationsHistoryTable(Schema.Orders)));
+            .UseSqlServer(
+                databaseSettings.ConnectionString,
+                sqlOptions => sqlOptions.MigrationsHistoryTable(Schema.Orders)));
+        
         //services.AddTransient<IOrderRepository, InMemoryOrderRepository>();
 
         services.AddTransient<IOrderRepository, SqlOrderRepository>();

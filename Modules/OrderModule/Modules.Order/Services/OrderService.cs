@@ -1,4 +1,5 @@
-﻿using Modules.Orders.Interfaces;
+﻿using Modules.Inventory.Models;
+using Modules.Orders.Interfaces;
 using Modules.Orders.Models;
 
 namespace Modules.Orders.Services;
@@ -21,11 +22,13 @@ internal class OrderService(
             itemModel.PricePerUnit = item.Price;
             itemModel.Total = itemModel.Quantity * item.Price;
 
-            inventoryRabbitMqClient.UpdateQuantity(new Inventory.Models.UpdateQuantityDto
+            var updateQuantityDto = new UpdateQuantityDto
             {
                 ItemId = itemModel.ItemId,
                 Amount = itemModel.Quantity * -1
-            });
+            };
+
+            inventoryRabbitMqClient.UpdateQuantity(updateQuantityDto);
         }
 
         orderDto.Total = orderDto.Items.Sum(i => i.Total);
