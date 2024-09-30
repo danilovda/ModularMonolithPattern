@@ -19,7 +19,7 @@ namespace Modules.Orders.Repositories.Migrations
                 schema: "orders",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,12 +31,12 @@ namespace Modules.Orders.Repositories.Migrations
                 schema: "orders",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ItemId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Quantity = table.Column<int>(type: "integer", nullable: false),
-                    PricePerUnit = table.Column<double>(type: "double precision", nullable: false),
-                    Total = table.Column<double>(type: "double precision", nullable: false),
-                    OrderId = table.Column<Guid>(type: "uuid", nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    PricePerUnit = table.Column<double>(type: "float", nullable: false),
+                    Total = table.Column<double>(type: "float", nullable: false),
+                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {

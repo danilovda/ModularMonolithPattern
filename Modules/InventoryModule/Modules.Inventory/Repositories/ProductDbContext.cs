@@ -19,12 +19,13 @@ internal class ProductDbContext : DbContext
         _logger.LogDebug(
             "-->Database.EnsureCreating ({ApplicationContext})",
             Assembly.GetExecutingAssembly().GetName().Name);
-        
+
+        //Database.EnsureDeleted();
+        //Database.EnsureCreated(); 
         Database.Migrate();
 
         //Add-Migration Create_Tables -Context ProductDbContext -o Repositories/Migrations
         //Update-Database -Context OrderDbContext
-
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

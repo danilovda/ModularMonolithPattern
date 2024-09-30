@@ -6,7 +6,9 @@ services:
       dockerfile: WebApi/Dockerfile
     depends_on:
       - rabbitmq
-      - postgres_db
+      - mssql
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger:4317"
 
   rabbitmq:
     image: rabbitmq:management
@@ -16,12 +18,20 @@ services:
       - 15672:15672
     hostname: rabbitmq
 
-  postgres_db:
-    container_name: postgres
-    image: postgres:latest
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123456
-      POSTGRES_DB: modular_monolith_db
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
     ports:
-      - "5432:5432"  
+      - "1433:1433"
+    environment:
+      - MSSQL_PID=Express
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=pa55w0rd! 
+
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: Jaeger
+    ports:
+      - 4317:4317
+      - 4318:4318
+      - 16686:16686
